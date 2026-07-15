@@ -174,6 +174,14 @@
   .modal-x{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px}
   .modal-cap{font-weight:650;margin-bottom:12px}
   .modal-hint{font-size:12.5px;color:var(--muted);margin-top:12px}
+  .donate-lead{color:var(--muted);font-size:14.5px;margin:0 0 14px}
+  .donate-coin{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--panel2);
+    border:1px solid var(--border);border-radius:9px;padding:12px 14px}
+  .donate-net{font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap}
+  .donate-addr{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;color:var(--text);
+    word-break:break-all;flex:1;min-width:180px}
+  .donate-btns{display:flex;gap:6px;flex-wrap:wrap}
+  .donate-warn{font-size:12px;color:var(--muted);margin:12px 0 0}
 </style>
 </head>
 <body>
@@ -276,6 +284,20 @@
       <div class="faq-item"><h3>Which RouterOS version do I need?</h3><p>RouterOS v7 or newer, where WireGuard is built in.</p></div>
     </div>
   </div>
+
+  <div class="card donate">
+    <h2 data-i18n="donate_title">Support MeshTik</h2>
+    <p class="donate-lead" data-i18n="donate_lead">MeshTik is free, with no ads and no tracking. If it saved you time, you can support it with a small USDT donation.</p>
+    <div class="donate-coin">
+      <span class="donate-net" data-i18n="donate_net">USDT · TRC-20 (Tron)</span>
+      <code class="donate-addr" id="donateAddr">TEonx8jPPchEgNatkojCdJ2K2FVVfd1efn</code>
+      <div class="donate-btns">
+        <button class="mini" id="donateCopy" data-i18n="copy">Copy</button>
+        <button class="mini" id="donateQr" data-i18n="qr">QR</button>
+      </div>
+    </div>
+    <p class="donate-warn" data-i18n="donate_warn">Send only USDT on the TRON (TRC-20) network to this address. Sending any other coin or network may lose your funds.</p>
+  </div>
 </main>
 
 <footer>
@@ -322,6 +344,11 @@ const I18N={
   about_p2:"Every private and public key is generated locally in your browser with Curve25519 and never leaves your device. You can download each config, grab them all as a zip, or scan a QR code to import a config straight into the WireGuard mobile app.",
   faq_title:"FAQ",footer:"Keys are generated locally with Curve25519 and never sent anywhere.",
   maker:"Built out of frustration with hand-wiring WireGuard peers between sites.",
+  donate_title:"Support MeshTik",
+  donate_lead:"MeshTik is free, with no ads and no tracking. If it saved you time, you can support it with a small USDT donation.",
+  donate_net:"USDT · TRC-20 (Tron)",
+  donate_warn:"Send only USDT on the TRON (TRC-20) network to this address. Sending any other coin or network may lose your funds.",
+  donate_qr_hint:"Scan to send USDT on the TRON (TRC-20) network.",
   err_name:"Every node needs a name.",err_min:"Add at least two nodes.",err_subnet:"Tunnel subnet must look like 10.10.10.0/24.",
   faq:[["Are my private keys safe?","Yes. Every keypair is generated in your browser with Curve25519, the same curve WireGuard uses. Nothing is uploaded — the tool even works offline."],
        ["Does it work with devices other than MikroTik?","Yes. Set a node's device to WireGuard config and you get a universal wg-quick file that runs on Windows, macOS, Linux, and phones — all in one mesh with your MikroTik routers."],
@@ -350,6 +377,11 @@ const I18N={
   about_p2:"Каждый приватный и публичный ключ генерируется локально в вашем браузере по Curve25519 и никогда не покидает устройство. Можно скачать каждый конфиг по отдельности, забрать все одним zip-архивом или отсканировать QR-код, чтобы импортировать конфиг прямо в мобильное приложение WireGuard.",
   faq_title:"Частые вопросы",footer:"Ключи генерируются локально по Curve25519 и никуда не отправляются.",
   maker:"Сделано от усталости вручную прописывать пиры WireGuard между площадками.",
+  donate_title:"Поддержать MeshTik",
+  donate_lead:"MeshTik бесплатен, без рекламы и слежки. Если он сэкономил вам время, можно поддержать проект небольшим донатом в USDT.",
+  donate_net:"USDT · TRC-20 (Tron)",
+  donate_warn:"Отправляйте на этот адрес только USDT в сети TRON (TRC-20). Другая монета или сеть — деньги можно потерять.",
+  donate_qr_hint:"Отсканируйте, чтобы отправить USDT в сети TRON (TRC-20).",
   err_name:"У каждого узла должно быть имя.",err_min:"Добавьте хотя бы два узла.",err_subnet:"Подсеть туннеля должна быть вида 10.10.10.0/24.",
   faq:[["Мои приватные ключи в безопасности?","Да. Каждая пара ключей генерируется в вашем браузере по Curve25519 — той же кривой, что использует WireGuard. Ничего не загружается на сервер, инструмент работает даже офлайн."],
        ["Работает не только с MikroTik?","Да. Выберите у узла тип «Конфиг WireGuard» — получите универсальный файл wg-quick для Windows, macOS, Linux и телефонов, всё в одной mesh-сети вместе с роутерами MikroTik."],
@@ -378,6 +410,11 @@ const I18N={
   about_p2:"每个私钥和公钥都使用 Curve25519 在你的浏览器本地生成，绝不离开你的设备。你可以单独下载每个配置、将全部打包为 zip，或扫描二维码直接把配置导入 WireGuard 手机应用。",
   faq_title:"常见问题",footer:"密钥使用 Curve25519 在本地生成，绝不外传。",
   maker:"厌倦了在各站点之间手动配置 WireGuard 对等端，于是做了这个。",
+  donate_title:"支持 MeshTik",
+  donate_lead:"MeshTik 完全免费，无广告、无追踪。如果它帮你节省了时间，可以用少量 USDT 支持一下。",
+  donate_net:"USDT · TRC-20 (Tron)",
+  donate_warn:"仅可向此地址转入 TRON (TRC-20) 网络的 USDT。使用其他币种或网络可能导致资金丢失。",
+  donate_qr_hint:"扫码以通过 TRON (TRC-20) 网络发送 USDT。",
   err_name:"每个节点都需要一个名称。",err_min:"请至少添加两个节点。",err_subnet:"隧道子网格式应为 10.10.10.0/24。",
   faq:[["我的私钥安全吗？","安全。每对密钥都使用 Curve25519（WireGuard 所用的曲线）在你的浏览器中生成。任何内容都不会上传，本工具甚至可离线使用。"],
        ["支持 MikroTik 以外的设备吗？","支持。将节点设备设为 WireGuard 配置，即可获得通用的 wg-quick 文件，可运行于 Windows、macOS、Linux 和手机，与 MikroTik 路由器同处一张互联网络。"],
@@ -406,6 +443,11 @@ const I18N={
   about_p2:"Jeder private und öffentliche Schlüssel wird lokal in deinem Browser mit Curve25519 erzeugt und verlässt dein Gerät nie. Du kannst jede Konfiguration einzeln herunterladen, alle als ZIP holen oder einen QR-Code scannen, um eine Konfiguration direkt in die mobile WireGuard-App zu importieren.",
   faq_title:"Häufige Fragen",footer:"Schlüssel werden lokal mit Curve25519 erzeugt und nie versendet.",
   maker:"Entstanden aus dem Frust, WireGuard-Peers zwischen Standorten von Hand zu verdrahten.",
+  donate_title:"MeshTik unterstützen",
+  donate_lead:"MeshTik ist kostenlos, ohne Werbung und ohne Tracking. Wenn es dir Zeit gespart hat, kannst du es mit einer kleinen USDT-Spende unterstützen.",
+  donate_net:"USDT · TRC-20 (Tron)",
+  donate_warn:"Sende an diese Adresse nur USDT im TRON-Netzwerk (TRC-20). Andere Coins oder Netzwerke können zum Verlust der Mittel führen.",
+  donate_qr_hint:"Scannen, um USDT über das TRON-Netzwerk (TRC-20) zu senden.",
   err_name:"Jeder Knoten braucht einen Namen.",err_min:"Füge mindestens zwei Knoten hinzu.",err_subnet:"Das Tunnel-Subnetz muss wie 10.10.10.0/24 aussehen.",
   faq:[["Sind meine privaten Schlüssel sicher?","Ja. Jedes Schlüsselpaar wird in deinem Browser mit Curve25519 erzeugt — derselben Kurve, die WireGuard nutzt. Nichts wird hochgeladen, das Tool funktioniert sogar offline."],
        ["Funktioniert es auch mit anderen Geräten als MikroTik?","Ja. Setze den Gerätetyp eines Knotens auf WireGuard-Konfig und du erhältst eine universelle wg-quick-Datei für Windows, macOS, Linux und Smartphones — alles in einem Mesh mit deinen MikroTik-Routern."],
@@ -434,6 +476,11 @@ const I18N={
   about_p2:"Cada clave privada y pública se genera localmente en tu navegador con Curve25519 y nunca sale de tu dispositivo. Puedes descargar cada configuración por separado, obtenerlas todas en un zip o escanear un código QR para importar una configuración directamente en la app móvil de WireGuard.",
   faq_title:"Preguntas frecuentes",footer:"Las claves se generan localmente con Curve25519 y nunca se envían.",
   maker:"Nació del hartazgo de cablear peers de WireGuard a mano entre sedes.",
+  donate_title:"Apoya MeshTik",
+  donate_lead:"MeshTik es gratis, sin anuncios ni rastreo. Si te ahorró tiempo, puedes apoyarlo con una pequeña donación en USDT.",
+  donate_net:"USDT · TRC-20 (Tron)",
+  donate_warn:"Envía a esta dirección solo USDT en la red TRON (TRC-20). Otra moneda o red puede hacer que pierdas los fondos.",
+  donate_qr_hint:"Escanea para enviar USDT por la red TRON (TRC-20).",
   err_name:"Cada nodo necesita un nombre.",err_min:"Añade al menos dos nodos.",err_subnet:"La subred del túnel debe tener el formato 10.10.10.0/24.",
   faq:[["¿Mis claves privadas están seguras?","Sí. Cada par de claves se genera en tu navegador con Curve25519, la misma curva que usa WireGuard. No se sube nada; la herramienta funciona incluso sin conexión."],
        ["¿Funciona con dispositivos que no sean MikroTik?","Sí. Pon el dispositivo de un nodo en «Configuración WireGuard» y obtendrás un archivo wg-quick universal para Windows, macOS, Linux y móviles, todo en una malla junto a tus routers MikroTik."],
@@ -729,6 +776,22 @@ function showQr(b){
 }
 document.getElementById("qrClose").onclick=()=>qrModal.style.display="none";
 qrModal.addEventListener("click",e=>{if(e.target===qrModal)qrModal.style.display="none";});
+
+/* ---------------- donate ---------------- */
+(function(){
+  const addr=document.getElementById("donateAddr");
+  if(!addr)return;
+  const val=addr.textContent.trim();
+  const cp=document.getElementById("donateCopy");
+  cp.onclick=()=>navigator.clipboard.writeText(val).then(()=>{cp.textContent=t("copied");setTimeout(()=>cp.textContent=t("copy"),1200);});
+  document.getElementById("donateQr").onclick=()=>{
+    document.getElementById("qrCap").textContent=t("donate_net");
+    const holder=document.getElementById("qrImg");
+    try{const qr=qrcode(0,"L");qr.addData(val);qr.make();holder.innerHTML=qr.createImgTag(6,12);}catch(e){holder.innerHTML="";}
+    document.getElementById("qrHint").textContent=t("donate_qr_hint");
+    qrModal.style.display="grid";
+  };
+})();
 
 /* ---------------- faq ---------------- */
 function renderFaq(){
