@@ -60,12 +60,12 @@
   :root[data-theme="dark"]{
     --bg:#0f1115;--panel:#161a20;--panel2:#1b2027;--border:#262c35;--text:#e7ebf0;
     --muted:#98a2b0;--accent:#4a9eff;--accent-ink:#04213f;--ok:#2ea043;--ok-ink:#04250f;
-    --err:#f0616d;--field:#0b0d11;--code:#c9d3df;--warn:#e3b341;--warn-bg:#2a2410;
+    --err:#f0616d;--field:#0b0d11;--code:#c9d3df;
   }
   :root[data-theme="light"]{
     --bg:#f6f7f9;--panel:#ffffff;--panel2:#f0f2f5;--border:#e3e6ea;--text:#1a1d23;
     --muted:#5c6470;--accent:#2563eb;--accent-ink:#ffffff;--ok:#16a34a;--ok-ink:#ffffff;
-    --err:#d92d3c;--field:#f4f6f8;--code:#2b3138;--warn:#b7791f;--warn-bg:#fbf3dd;
+    --err:#d92d3c;--field:#f4f6f8;--code:#2b3138;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -136,17 +136,6 @@
   .chk input{width:16px;height:16px;accent-color:var(--accent);cursor:pointer}
   .hint{font-size:12.5px;color:var(--muted);margin-top:10px}
   .err-msg{color:var(--err);font-size:13px;margin-top:10px;min-height:16px}
-  .warn-msg{margin-top:10px}
-  .warn-msg .warn-box{background:var(--warn-bg);border:1px solid var(--warn);border-radius:8px;padding:10px 12px;font-size:12.8px;color:var(--text);line-height:1.5}
-  .warn-msg .warn-box b{color:var(--warn)}
-  .warn-msg .warn-box ul{margin:6px 0 0;padding-left:18px}
-  .warn-msg .warn-box code{background:transparent;color:var(--code);font-size:12.5px}
-  .node-head-left{display:flex;align-items:center;gap:12px;min-width:0}
-  .hubpick{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);cursor:pointer;margin:0;white-space:nowrap}
-  .hubpick input{width:14px;height:14px;accent-color:var(--accent);cursor:pointer;margin:0}
-  .hubpick.on{color:var(--accent)}
-  .topo-row{margin-top:12px}
-  .topo-row .hint{margin-top:6px}
   .out-node{margin-bottom:16px}
   .out-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}
   .out-title{font-size:15px;font-weight:650;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -208,16 +197,6 @@
       <div><label data-i18n="def_port">Shared port</label>
         <div class="portrow"><input id="defport" value="13231"><button class="portbtn" id="rerollPort" type="button" title="Random port"></button></div>
       </div>
-      <div><label data-i18n="topology">Topology</label>
-        <select class="f" id="topology">
-          <option value="mesh" data-i18n="topo_mesh">Full mesh</option>
-          <option value="hub" data-i18n="topo_hub">Hub &amp; spoke</option>
-        </select>
-      </div>
-    </div>
-    <div class="topo-row" id="hubOpts" style="display:none">
-      <label class="chk" style="margin-top:0"><input type="checkbox" id="hubInet"><span data-i18n="hub_inet">Route spoke clients' internet through the hub (full tunnel)</span></label>
-      <div class="hint" data-i18n="hub_hint">Spokes peer only with the hub and reach each other through it. Pick the hub node below.</div>
     </div>
   </div>
 
@@ -231,7 +210,6 @@
     </div>
     <div class="hint" data-i18n="wan_note">Public endpoint is the IP or hostname other nodes use to reach this one. Leave it blank for a node behind NAT — it still connects outbound via keepalive.</div>
     <div class="err-msg" id="err"></div>
-    <div class="warn-msg" id="warn"></div>
   </div>
 
   <details class="card adv">
@@ -307,10 +285,6 @@ const I18N={
   ph_name:"office-a",ph_wan:"203.0.113.5 or host.example.net",ph_lan:"192.168.10.0/24",
   advanced:"Advanced",mtu:"MTU",dns:"DNS (config only)",psk_label:"Use preshared keys (unique per peer pair)",
   extra_allowed:"Extra AllowedIPs",extra_ph:"10.8.0.0/24",cfg_dev:"WireGuard config",pubkey:"public key",
-  topology:"Topology",topo_mesh:"Full mesh",topo_hub:"Hub & spoke",hub_role:"Hub",
-  hub_inet:"Route spoke clients' internet through the hub (full tunnel)",
-  hub_hint:"Spokes peer only with the hub and reach each other through it. Pick the hub node below.",
-  warn_head:"Overlapping AllowedIPs — routing may break:",warn_tunnel:"overlaps the tunnel subnet",
   out_title:"Generated configuration",copy:"Copy",copied:"Copied",download:"Download",download_all:"Download all (.zip)",qr:"QR",
   qr_hint:"Scan with the WireGuard app (iOS/Android) to import this config.",
   qr_toobig:"This config is too large to fit in a QR code.",
@@ -335,10 +309,6 @@ const I18N={
   ph_name:"office-a",ph_wan:"203.0.113.5 или host.example.net",ph_lan:"192.168.10.0/24",
   advanced:"Дополнительно",mtu:"MTU",dns:"DNS (только конфиг)",psk_label:"Использовать preshared-ключи (уникальные для пары)",
   extra_allowed:"Доп. AllowedIPs",extra_ph:"10.8.0.0/24",cfg_dev:"Конфиг WireGuard",pubkey:"публичный ключ",
-  topology:"Топология",topo_mesh:"Полная mesh",topo_hub:"Хаб и спицы",hub_role:"Хаб",
-  hub_inet:"Пускать интернет клиентов-спиц через хаб (полный туннель)",
-  hub_hint:"Спицы пирятся только с хабом и достают друг друга через него. Выберите узел-хаб ниже.",
-  warn_head:"Пересекающиеся AllowedIPs — маршрутизация может сломаться:",warn_tunnel:"пересекается с подсетью туннеля",
   out_title:"Готовая конфигурация",copy:"Копировать",copied:"Скопировано",download:"Скачать",download_all:"Скачать всё (.zip)",qr:"QR",
   qr_hint:"Отсканируйте приложением WireGuard (iOS/Android), чтобы импортировать конфиг.",
   qr_toobig:"Этот конфиг слишком большой для QR-кода.",
@@ -363,10 +333,6 @@ const I18N={
   ph_name:"office-a",ph_wan:"203.0.113.5 或 host.example.net",ph_lan:"192.168.10.0/24",
   advanced:"高级",mtu:"MTU",dns:"DNS（仅配置文件）",psk_label:"使用预共享密钥（每对唯一）",
   extra_allowed:"额外 AllowedIPs",extra_ph:"10.8.0.0/24",cfg_dev:"WireGuard 配置",pubkey:"公钥",
-  topology:"拓扑",topo_mesh:"全互联",topo_hub:"星型（中心+分支）",hub_role:"中心",
-  hub_inet:"让分支客户端的互联网流量经过中心节点（全隧道）",
-  hub_hint:"分支节点仅与中心节点建立对等连接，并通过它互相访问。请在下方选择中心节点。",
-  warn_head:"AllowedIPs 存在重叠——路由可能中断：",warn_tunnel:"与隧道子网重叠",
   out_title:"生成的配置",copy:"复制",copied:"已复制",download:"下载",download_all:"下载全部 (.zip)",qr:"二维码",
   qr_hint:"用 WireGuard 应用（iOS/Android）扫描以导入此配置。",
   qr_toobig:"此配置过大，无法生成二维码。",
@@ -391,10 +357,6 @@ const I18N={
   ph_name:"office-a",ph_wan:"203.0.113.5 oder host.example.net",ph_lan:"192.168.10.0/24",
   advanced:"Erweitert",mtu:"MTU",dns:"DNS (nur Konfig)",psk_label:"Preshared-Keys verwenden (pro Paar einzigartig)",
   extra_allowed:"Zusätzliche AllowedIPs",extra_ph:"10.8.0.0/24",cfg_dev:"WireGuard-Konfig",pubkey:"Öffentlicher Schlüssel",
-  topology:"Topologie",topo_mesh:"Vollvermascht",topo_hub:"Hub & Spoke",hub_role:"Hub",
-  hub_inet:"Internet der Spoke-Clients über den Hub leiten (Full Tunnel)",
-  hub_hint:"Spokes peeren nur mit dem Hub und erreichen sich über ihn. Hub-Knoten unten auswählen.",
-  warn_head:"Überlappende AllowedIPs — das Routing kann brechen:",warn_tunnel:"überschneidet sich mit dem Tunnel-Subnetz",
   out_title:"Erzeugte Konfiguration",copy:"Kopieren",copied:"Kopiert",download:"Herunterladen",download_all:"Alle herunterladen (.zip)",qr:"QR",
   qr_hint:"Mit der WireGuard-App (iOS/Android) scannen, um diese Konfiguration zu importieren.",
   qr_toobig:"Diese Konfiguration ist zu groß für einen QR-Code.",
@@ -419,10 +381,6 @@ const I18N={
   ph_name:"office-a",ph_wan:"203.0.113.5 o host.example.net",ph_lan:"192.168.10.0/24",
   advanced:"Avanzado",mtu:"MTU",dns:"DNS (solo configuración)",psk_label:"Usar claves precompartidas (únicas por par)",
   extra_allowed:"AllowedIPs adicionales",extra_ph:"10.8.0.0/24",cfg_dev:"Configuración WireGuard",pubkey:"clave pública",
-  topology:"Topología",topo_mesh:"Malla completa",topo_hub:"Hub y radios",hub_role:"Hub",
-  hub_inet:"Enrutar el internet de los clientes radio a través del hub (túnel completo)",
-  hub_hint:"Los radios se emparejan solo con el hub y se alcanzan entre sí a través de él. Elige el nodo hub abajo.",
-  warn_head:"AllowedIPs superpuestas: el enrutamiento puede romperse:",warn_tunnel:"se superpone con la subred del túnel",
   out_title:"Configuración generada",copy:"Copiar",copied:"Copiado",download:"Descargar",download_all:"Descargar todo (.zip)",qr:"QR",
   qr_hint:"Escanéalo con la app WireGuard (iOS/Android) para importar esta configuración.",
   qr_toobig:"Esta configuración es demasiado grande para un código QR.",
@@ -462,30 +420,6 @@ function parseSubnet(s){
 }
 function hostIP(base,n){const o=[...base.oct];o[3]+=n;let c=0;for(let i=3;i>=0;i--){o[i]+=c;c=o[i]>255?Math.floor(o[i]/256):0;o[i]%=256;}return o.join(".");}
 
-/* ---------------- overlap detection ---------------- */
-function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
-function ipToInt(ip){const o=ip.split(".").map(Number);if(o.length!==4||o.some(x=>isNaN(x)||x<0||x>255))return null;return ((o[0]<<24)|(o[1]<<16)|(o[2]<<8)|o[3])>>>0;}
-function parseCidr(s){const m=(s||"").trim().match(/^(\d+\.\d+\.\d+\.\d+)\/(\d+)$/);if(!m)return null;const ip=ipToInt(m[1]);const p=+m[2];if(ip===null||p<0||p>32)return null;const mask=p===0?0:(0xFFFFFFFF<<(32-p))>>>0;return {net:(ip&mask)>>>0,prefix:p,str:`${m[1]}/${p}`};}
-function cidrsOverlap(a,b){const p=Math.min(a.prefix,b.prefix);const mask=p===0?0:(0xFFFFFFFF<<(32-p))>>>0;return ((a.net&mask)>>>0)===((b.net&mask)>>>0);}
-function computeWarnings(){
-  let base;try{base=parseSubnet(document.getElementById("subnet").value);}catch(e){return [];}
-  const items=[];
-  nodes.forEach((nd,i)=>{
-    [...(nd.lan||"").split(","),...(nd.extra||"").split(",")].map(x=>x.trim()).filter(Boolean).forEach(raw=>{
-      const c=parseCidr(raw);if(c)items.push({idx:i,name:nd.name||("#"+(i+1)),c});
-    });
-  });
-  const tun=parseCidr(`${hostIP(base,0)}/${base.prefix}`);
-  const msgs=[];
-  for(let a=0;a<items.length;a++)for(let b=a+1;b<items.length;b++){
-    if(items[a].idx===items[b].idx)continue;
-    if(cidrsOverlap(items[a].c,items[b].c))
-      msgs.push(`<code>${esc(items[a].c.str)}</code> (${esc(items[a].name)}) ↔ <code>${esc(items[b].c.str)}</code> (${esc(items[b].name)})`);
-  }
-  items.forEach(it=>{if(tun&&cidrsOverlap(it.c,tun))msgs.push(`<code>${esc(it.c.str)}</code> (${esc(it.name)}) — ${esc(t("warn_tunnel"))} <code>${esc(tun.str)}</code>`);});
-  return msgs;
-}
-
 /* ---------------- icons ---------------- */
 const ICON_REFRESH='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>';
 const ICON_X='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
@@ -499,22 +433,16 @@ const ICON_MOON='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" str
 let nodes=[];
 function defPort(){return (document.getElementById("defport").value.trim())||"13231";}
 function randPort(){return String(1024+Math.floor(Math.random()*(65535-1024)));}
-function makeNode(name,type){return {name:name||"",type:type||"MikroTik",wan:"",port:defPort(),lan:"",extra:"",hub:false,keys:genKeypair()};}
-function topoMode(){return document.getElementById("topology").value==="hub"?"hub":"mesh";}
-function hubInetOn(){return document.getElementById("hubInet").checked;}
-function ensureHub(){ if(topoMode()!=="hub"||!nodes.length)return; if(!nodes.some(n=>n.hub))nodes[0].hub=true; }
+function makeNode(name,type){return {name:name||"",type:type||"MikroTik",wan:"",port:defPort(),lan:"",extra:"",keys:genKeypair()};}
 const nodesEl=document.getElementById("nodes");
 function truncKey(k){return k.slice(0,24)+"…";}
 
 function renderNodes(){
   nodesEl.innerHTML="";
-  const hub=topoMode()==="hub";
-  if(hub)ensureHub();
   nodes.forEach((nd,i)=>{
     const d=document.createElement("div");d.className="node";
-    const hubPick=hub?`<label class="hubpick${nd.hub?" on":""}"><input type="radio" name="hubpick" class="hubradio" ${nd.hub?"checked":""}><span>${t("hub_role")}</span></label>`:"";
     d.innerHTML=
-     `<div class="node-head"><div class="node-head-left"><span class="node-idx">${t("nodes")} ${i+1}</span>${hubPick}</div>
+     `<div class="node-head"><span class="node-idx">${t("nodes")} ${i+1}</span>
         <div class="node-actions">
           <button class="rk" title="${t('regen_all')}">${ICON_REFRESH}</button>
           <button class="rm" title="remove">${ICON_X}</button>
@@ -544,9 +472,7 @@ function renderNodes(){
       flash(q(".rk"));
       if(lastBlocks)generate();
     });
-    q(".rm").addEventListener("click",()=>{if(nodes.length>2){nodes.splice(i,1);renderNodes();if(lastBlocks)generate();}});
-    const hr=q(".hubradio");
-    if(hr)hr.addEventListener("change",()=>{nodes.forEach(n=>n.hub=false);nd.hub=true;renderNodes();if(lastBlocks)generate();});
+    q(".rm").addEventListener("click",()=>{if(nodes.length>2){nodes.splice(i,1);renderNodes();}});
     nodesEl.appendChild(d);
   });
 }
@@ -570,45 +496,16 @@ function buildAll(){
   }));
   const pskMap={};
   if(usePsk)for(let a=0;a<meta.length;a++)for(let b=a+1;b<meta.length;b++)pskMap[a+"-"+b]=genPsk();
-  const topology=topoMode();
-  if(topology==="hub"&&meta.length&&!meta.some(m=>m.hub))meta[0].hub=true;
-  const o={base,ka,iface,mtu,dns,usePsk,pskMap,topology,hubInet:hubInetOn()};
-  const plan=peerPlan(meta,o);
+  const o={base,ka,iface,mtu,dns,usePsk,pskMap};
   return meta.map(nd=>{
-    const pl=plan[nd.idx];
-    const text=nd.type==="Config"?buildConf(nd,pl.peers,o):buildMikrotik(nd,pl.peers,pl.routes,o);
+    const peers=meta.filter(p=>p.idx!==nd.idx);
+    const text=nd.type==="Config"?buildConf(nd,peers,o):buildMikrotik(nd,peers,o);
     return {name:nd.name,type:nd.type,ip:`${nd.tunIP}/${base.prefix}`,
       filename:`meshtik-${sanitize(nd.name)}.${nd.type==="Config"?"conf":"rsc"}`,text};
   });
 }
 
-/* Peering plan: full mesh, or hub-and-spoke where spokes reach each other through the hub. */
-function peerPlan(meta,o){
-  const plan={};
-  const hub=o.topology==="hub"?(meta.find(m=>m.hub)||meta[0]):null;
-  const withAllowed=p=>({...p,allowed:[`${p.tunIP}/32`,...p.lans]});
-  meta.forEach(nd=>{
-    let peers,routes=[];
-    if(o.topology!=="hub"){
-      peers=meta.filter(p=>p.idx!==nd.idx).map(withAllowed);
-      peers.forEach(p=>p.lans.forEach(lan=>routes.push({dst:lan,gw:p.tunIP,name:p.name||p.tunIP})));
-    }else if(nd.idx===hub.idx){
-      peers=meta.filter(p=>p.idx!==hub.idx).map(withAllowed);
-      peers.forEach(p=>p.lans.forEach(lan=>routes.push({dst:lan,gw:p.tunIP,name:p.name||p.tunIP})));
-    }else{
-      const others=meta.filter(p=>p.idx!==nd.idx);
-      const allowed=[];
-      others.forEach(p=>{allowed.push(`${p.tunIP}/32`);p.lans.forEach(l=>{if(!allowed.includes(l))allowed.push(l);});});
-      if(o.hubInet&&nd.type==="Config"&&!allowed.includes("0.0.0.0/0"))allowed.push("0.0.0.0/0");
-      peers=[{...hub,allowed}];
-      others.forEach(p=>p.lans.forEach(lan=>routes.push({dst:lan,gw:hub.tunIP,name:p.idx===hub.idx?(p.name||p.tunIP):`${p.name||p.tunIP} via ${hub.name||"hub"}`})));
-    }
-    plan[nd.idx]={peers,routes};
-  });
-  return plan;
-}
-
-function buildMikrotik(nd,peers,routes,o){
+function buildMikrotik(nd,peers,o){
   let s=`# =====================================================\n`+
         `#  ${nd.name||"(unnamed)"}  ·  MikroTik RouterOS v7\n`+
         `#  Tunnel address ${nd.tunIP}/${o.base.prefix}\n`+
@@ -619,15 +516,15 @@ function buildMikrotik(nd,peers,routes,o){
         `add address=${nd.tunIP}/${o.base.prefix} interface=${o.iface}\n\n`+
         `/interface wireguard peers\n`;
   peers.forEach(p=>{
-    const allowed=p.allowed.join(",");
+    const allowed=[`${p.tunIP}/32`,...p.lans].join(",");
     let l=`add interface=${o.iface} public-key="${p.keys.pub}" allowed-address=${allowed} persistent-keepalive=${o.ka}s`;
     if(o.usePsk)l+=` preshared-key="${pskFor(nd.idx,p.idx,o.pskMap)}"`;
     if(p.wan.trim())l+=` endpoint-address=${p.wan.trim()} endpoint-port=${p.port}`;
     l+=` comment="to ${p.name||p.tunIP}"`;
     s+=l+"\n";
   });
-  const routeLines=(routes||[]).map(r=>`add dst-address=${r.dst} gateway=${r.gw} comment="via ${r.name}"`);
-  if(routeLines.length)s+=`\n/ip route\n`+routeLines.join("\n")+"\n";
+  const routes=[];peers.forEach(p=>p.lans.forEach(lan=>routes.push(`add dst-address=${lan} gateway=${p.tunIP} comment="via ${p.name||p.tunIP}"`)));
+  if(routes.length)s+=`\n/ip route\n`+routes.join("\n")+"\n";
   s+=`\n/ip firewall filter\n`+
      `add chain=input action=accept protocol=udp dst-port=${nd.port} comment="Allow WireGuard"\n`+
      `add chain=forward action=accept in-interface=${o.iface} comment="WireGuard forward in"\n`+
@@ -646,7 +543,7 @@ function buildConf(nd,peers,o){
   if(o.dns)s+=`DNS = ${o.dns}\n`;
   if(nd.lans.length)s+=`# Linux gateway routing ${nd.lans.join(", ")}: enable net.ipv4.ip_forward=1\n`;
   peers.forEach(p=>{
-    const allowed=p.allowed.join(", ");
+    const allowed=[`${p.tunIP}/32`,...p.lans].join(", ");
     s+=`\n[Peer]\n`+
        `# to ${p.name||p.tunIP} (${p.type==="Config"?"config":"MikroTik"})\n`+
        `PublicKey = ${p.keys.pub}\n`;
@@ -681,13 +578,6 @@ function renderOutput(blocks){
   });
   document.getElementById("dlAll").innerHTML=ICON_DL+" "+t("download_all");
 }
-function renderWarnings(){
-  const warnEl=document.getElementById("warn");
-  const msgs=computeWarnings();
-  warnEl.innerHTML=msgs.length
-    ?`<div class="warn-box"><b>⚠ ${esc(t("warn_head"))}</b><ul>${msgs.map(m=>`<li>${m}</li>`).join("")}</ul></div>`
-    :"";
-}
 function generate(){
   errEl.textContent="";
   try{
@@ -695,10 +585,9 @@ function generate(){
     if(nodes.some(n=>!n.name.trim()))throw new Error(t("err_name"));
     lastBlocks=buildAll();
     renderOutput(lastBlocks);
-    renderWarnings();
     output.style.display="block";
     output.scrollIntoView({behavior:"smooth",block:"start"});
-  }catch(e){document.getElementById("warn").innerHTML="";errEl.textContent="⚠ "+e.message;}
+  }catch(e){errEl.textContent="⚠ "+e.message;}
 }
 function download(fn,text){const b=new Blob([text],{type:"text/plain"});const u=URL.createObjectURL(b);
   const a=document.createElement("a");a.href=u;a.download=fn;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(u);}
@@ -778,15 +667,6 @@ document.getElementById("rerollPort").onclick=()=>{
 document.getElementById("defport").addEventListener("input",e=>applySharedPort(e.target.value.trim()||"13231"));
 document.getElementById("generate").onclick=generate;
 document.getElementById("dlAll").onclick=downloadAll;
-document.getElementById("topology").onchange=e=>{
-  const hub=e.target.value==="hub";
-  document.getElementById("hubOpts").style.display=hub?"block":"none";
-  if(hub)ensureHub();
-  store("meshtik-topo",e.target.value);
-  renderNodes();
-  if(lastBlocks)generate();
-};
-document.getElementById("hubInet").onchange=()=>{if(lastBlocks)generate();};
 document.getElementById("lang").onchange=e=>{LANG=e.target.value;store("meshtik-lang",LANG);applyI18n();};
 document.getElementById("theme").onclick=()=>setTheme(document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark");
 
@@ -797,9 +677,6 @@ document.getElementById("theme").onclick=()=>setTheme(document.documentElement.g
   LANG=I18N[savedLang]?savedLang:"en";
   document.getElementById("lang").value=LANG;
   document.getElementById("defport").value=randPort();
-  const savedTopo=load("meshtik-topo")==="hub"?"hub":"mesh";
-  document.getElementById("topology").value=savedTopo;
-  document.getElementById("hubOpts").style.display=savedTopo==="hub"?"block":"none";
   nodes=[makeNode("office-a","MikroTik"),makeNode("laptop","Config")];
   nodes[0].wan="203.0.113.10";nodes[0].lan="192.168.10.0/24";
   nodes[1].wan="";nodes[1].lan="";
